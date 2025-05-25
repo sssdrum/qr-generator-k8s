@@ -7,21 +7,28 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const api = "http://localhost:8080/generate-qr";
+
     try {
-      const response = await fetch(api, {
+      // Load backend base URL from config.json
+      const config = await fetch("/config/config.json").then((res) =>
+        res.json(),
+      );
+      const apiBase = config.api;
+      const apiUrl = `${apiBase}/generate-qr`;
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url: url }),
+        body: JSON.stringify({ url }),
       });
+
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
-      // Get the image as a blob
+
       const blob = await response.blob();
-      // Create an object URL for the blob
       const imageUrl = URL.createObjectURL(blob);
       setQrCode(imageUrl);
     } catch (error: any) {
