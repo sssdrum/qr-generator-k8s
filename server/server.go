@@ -57,17 +57,26 @@ func genQR(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	mux := http.NewServeMux()
-
 	mux.HandleFunc("/hello", hello)
 	mux.HandleFunc("/generate-qr", genQR)
 
 	loggedMux := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		// Enable CORS
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight requests
+		if req.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		log.Printf("%s %s from %s", req.Method, req.URL.Path, req.RemoteAddr)
 		mux.ServeHTTP(w, req)
 	})
 
 	log.Printf("Starting server...")
 	log.Printf("Server listening at http://localhost:8080/")
-
 	http.ListenAndServe(":8080", loggedMux)
 }
