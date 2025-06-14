@@ -10,6 +10,7 @@ import (
 )
 
 func hello(w http.ResponseWriter, req *http.Request) {
+	log.Printf("Hello endpoint accessed from %s", req.RemoteAddr)
 	fmt.Fprint(w, "hello\n")
 }
 
@@ -18,7 +19,10 @@ type QRReq struct {
 }
 
 func genQR(w http.ResponseWriter, req *http.Request) {
+	log.Printf("QR generation request from %s", req.RemoteAddr)
+
 	if req.Method != http.MethodPost {
+		log.Printf("Invalid method %s attempted", req.Method)
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -27,6 +31,7 @@ func genQR(w http.ResponseWriter, req *http.Request) {
 
 	err := json.NewDecoder(req.Body).Decode(&qrReq)
 	if err != nil {
+		log.Printf("JSON decode error: %v", err)
 		fmt.Fprint(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
@@ -34,6 +39,7 @@ func genQR(w http.ResponseWriter, req *http.Request) {
 
 	// Validate URL is provided
 	if qrReq.URL == "" {
+		log.Printf("Empty URL provided")
 		http.Error(w, "URL is required", http.StatusBadRequest)
 		return
 	}
@@ -43,7 +49,7 @@ func genQR(w http.ResponseWriter, req *http.Request) {
 	var png []byte
 	png, err = qrcode.Encode(qrReq.URL, qrcode.Medium, 256)
 	if err != nil {
-		log.Printf("%s", err)
+		log.Printf("QR generation failed: %v", err)
 		http.Error(w, "Error generating qr code for url: %s", http.StatusInternalServerError)
 		return
 	}
