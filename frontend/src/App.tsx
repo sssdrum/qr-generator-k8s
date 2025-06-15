@@ -7,7 +7,7 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const api = "http://localhost:8080/generate-qr";
+    const api = "http://192.168.49.2:31923/generate-qr";
     try {
       const response = await fetch(api, {
         method: "POST",
