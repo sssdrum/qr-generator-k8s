@@ -21,7 +21,7 @@
 
    Optional: - Port forward to hosts's ports to check if it works and access pods logs
 
-7. Add a postgres DB to cache qr codes as a StatefulSet
+7. Add a postgres DB to cache qr codes as a StatefulSet ✓
 
 8. Build an operator in go/ansible
 
