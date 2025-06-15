@@ -47,6 +47,8 @@ Get public url of service `minikube service frontend-service --url`
 2. Rebuild image `docker build -t <image> <path to image>`
 3. Apply changes `kubectl rollout restart deployment <deployment>`
 
+# Secrets
+
 # Debugging
 
 App A does not reach app B. How to debug?
