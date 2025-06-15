@@ -63,8 +63,8 @@ func genQR(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/hello", hello)
-	mux.HandleFunc("/generate-qr", genQR)
+	mux.HandleFunc("/api/hello", hello)
+	mux.HandleFunc("/api/generate-qr", genQR)
 
 	loggedMux := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		// Enable CORS
